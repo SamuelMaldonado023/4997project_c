@@ -40,5 +40,5 @@ int main() {
     int amount_of_files = readFiles("../books_description_files");
     cout << "The amount of files in directory is: " << amount_of_files << "\n";
 
-    return 0;
+    return 0;
 }
