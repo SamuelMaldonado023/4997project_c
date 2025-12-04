@@ -38,7 +38,9 @@ int readFiles(const string& directory) {
 }
 
 int option;
-string userkeys,top1,top2,top3,top4,top5;
+vector<string> user_keywords;
+string top1,top2,top3,top4,top5;
+// load directory index
 
 int main() {
    
@@ -50,7 +52,10 @@ int main() {
             \tSearch movies and books descriptions by keywords
             \tEnter keywords:" ;
 
-    cin >> userkeys;
+    while(cin >> temp){ // will enter ekywords as long as user permits
+        if (temp == "|") break;
+        user_keywords.push_back(temp);
+    }
 
     // if nothing with that keyword found, desplegar failure or empty, 
     // si encuentran related keywords
@@ -58,7 +63,10 @@ int main() {
             \t" << top1 << endl << top2 << endl << top3 << endl << top4 << endl << top5 << endl;
      cout << "Choose from 1-5, 0 to quit";
      cin << option;
-     if (option == 0) break;
+     if (option == 0) { // quit if user enters 0
+        cout << "Quitting.." << endl;
+        return 0;
+     }
      else // display filename chosen and description
             
 
