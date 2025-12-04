@@ -2,6 +2,9 @@
 #include <filesystem>
 #include <fstream>
 #include <string>
+#include "ParsedFile.h"
+#include <map>
+
 
 using namespace std;
 namespace fs = std::filesystem;
