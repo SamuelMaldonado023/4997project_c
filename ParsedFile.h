@@ -5,6 +5,8 @@
    funciones adicionales que pueden ser utilizadas en el proyecto 
    final de CCOM 3034. 
 */
+#ifndef PARSED_FILE_H
+#define PARSED_FILE_H
 
 #include <sys/types.h>
 #include <dirent.h>
