@@ -40,14 +40,15 @@ int readFiles(const string& directory) {
 int option;
 vector<string> user_keywords;
 string top1,top2,top3,top4,top5;
-// load directory index
+
 
 int main() {
-   
-    // How you send the file name dependes of where your executable file is
-    //int amount_of_files = readFiles("books_description_files");
-    //cout << "The amount of files in directory is: " << amount_of_files << "\n";
+    // load directory index ( turn databases into inverted index)
 
+
+
+
+    // user program start
     cout<< "\n----Description Search Engine-----\n
             \tSearch movies and books descriptions by keywords
             \tEnter keywords:" ;
@@ -63,12 +64,17 @@ int main() {
             \t" << top1 << endl << top2 << endl << top3 << endl << top4 << endl << top5 << endl;
      cout << "Choose from 1-5, 0 to quit";
      cin << option;
+     
+     
+     while (option < 0 || option > 5){
+        cout << "Invalid option(has to be 1-5)";
+        cin << option;
+     }
+    
      if (option == 0) { // quit if user enters 0
         cout << "Quitting.." << endl;
         return 0;
      }
-     else // display filename chosen and description
-            
 
     return 0;
 }
