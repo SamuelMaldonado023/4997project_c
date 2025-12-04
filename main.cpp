@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include "ParsedFile.h"
+#include "InvertedIndex.h"
 #include <map>
 
 
@@ -67,7 +68,7 @@ int main() {
      
      
      while (option < 0 || option > 5){
-        cout << "Invalid option(has to be 1-5)";
+        cout << "Invalid option(has to be 1-5): ";
         cin << option;
      }
     
