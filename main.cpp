@@ -54,6 +54,7 @@ string temp;
 
 
 int main() {
+
     // -----load directory index ( turn databases into inverted index)
     cout << "\n Loading directory index.. please wait..." << endl;
 
@@ -90,74 +91,89 @@ int main() {
     }
 
     // ----user program start-----
-    cout<< "\n\t----Description Search Engine-----\nSearch movies and books descriptions by keywords\nEnter keywords(| to end):" ;
+    cout<< "\n\t----Description Search Engine-----\n";
 
-    while(cin >> temp){ // will enter ekywords as long as user permits
-        if (temp == "|") break;
-        user_keywords.push_back(temp);
+    while(true){  // Loop to allow user to keep performing searches.
+        user_keywords.clear();
+        cout << "\nSearch movies and books descriptions by keywords\nEnter keywords(| to end, 'quit' to exit): " ;
+
+        while(cin >> temp){ // will enter keywords as long as user permits
+            if (temp == "|") break;
+            if (temp == "quit") {
+            cout << "Quitting program...";
+            return 0;
+        }
+            user_keywords.push_back(temp);
     }
 
-    // ----- AFTER USER results----
-    vector<FileEntry> movieResults = movieindex.search(user_keywords);
-    vector<FileEntry> bookResults  = bookindex.search(user_keywords);
+        if(user_keywords.empty()){
+            cout << "There were no keywords entered. Please try again \n";
+            continue;  // Will ask for keywords again
+        }
+    
 
-    cout << "\n\t----- Top Hits -----\n";
+        // ----- AFTER USER results----
+        vector<FileEntry> movieResults = movieindex.search(user_keywords);
+        vector<FileEntry> bookResults  = bookindex.search(user_keywords);
 
-    int movieN = min(5, (int)movieResults.size());
-    int bookN  = min(5, (int)bookResults.size());
+        cout << "\n\t----- Top Hits -----\n";
 
-    // move printer
-    cout << "\nMovies (1–5):\n";
-    for (int i = 0; i < movieN; i++) {
-        cout << i+1 << ". " << movieResults[i].filename 
-             << " (score=" << movieResults[i].count << ")\n";
-    }
+        int movieN = min(3, (int)movieResults.size());
+        int bookN  = min(3, (int)bookResults.size());
 
-    // book printer
-    cout << "\nBooks (6–10):\n";
-    for (int i = 0; i < bookN; i++) {
-        cout << (i+6) << ". " << bookResults[i].filename 
-             << " (score=" << bookResults[i].count << ")\n";
-    }
+        // move printer
+        cout << "\nMovies (1–3):\n";
+        for (int i = 0; i < movieN; i++) {
+            cout << i+1 << ". " << movieResults[i].filename 
+                << " (score=" << movieResults[i].count << ")\n";
+        }
 
-    int maxOption = movieN + bookN;
+        // book printer
+        cout << "\nBooks (4–6):\n";
+        for (int i = 0; i < bookN; i++) {
+            cout << (i+4) << ". " << bookResults[i].filename 
+                << " (score=" << bookResults[i].count << ")\n";
+        }
 
-    if (maxOption == 0) {
-        cout << "No matching results.. quitting..\n";
-        return 0;
-    }
+        int maxOption = movieN + bookN;
+
+        if (maxOption == 0) {
+            cout << "No matching results.. quitting..\n";
+            return 0;
+        }
 
     //------- user option input --------
-    cout << "\nChoose 1-" << maxOption << " or 0 to quit: ";
-    cin >> option;
-
-    while (option < 0 || option > maxOption) {
-        cout << "Invalid option(has to be 1-" << maxOption << "): ";
+        cout << "\nChoose 1-" << maxOption << " or 0 to quit: ";
         cin >> option;
+
+        while (option < 0 || option > maxOption) {
+            cout << "Invalid option(has to be 1-" << maxOption << "): ";
+            cin >> option;
+        }
+
+        if (option == 0) {
+            cout << "Quitting.." << endl;
+            return 0;
+        }
+
+        // ------- option selection output-----
+        string selectedFile;
+
+        if (option <= movieN) {
+            // movies 1–3
+            selectedFile = movieResults[option - 1].filename;
+        }
+        else {
+            // books 4–6
+            int bookIndexSelected = option - movieN - 1; 
+            selectedFile = bookResults[bookIndexSelected].filename;
+        }
+
+        // -------- search engine results -------
+        cout << "\n\t-----RESULT-----\n";
+        cout << selectedFile << "\n\n";
+        cout << readFullFile(selectedFile) << "\n";
+
+
     }
-
-    if (option == 0) {
-        cout << "Quitting.." << endl;
-        return 0;
-    }
-
-    // ------- option selection output-----
-    string selectedFile;
-
-    if (option <= movieN) {
-        // movies 1–5
-        selectedFile = movieResults[option - 1].filename;
-    }
-    else {
-        // books 6–10
-        int bookIndexSelected = option - 6; 
-        selectedFile = bookResults[bookIndexSelected].filename;
-    }
-
-    // -------- search engine results -------
-    cout << "\n\t-----RESULT-----\n";
-    cout << selectedFile << "\n\n";
-    cout << readFullFile(selectedFile) << "\n";
-
-    return 0;
 }
