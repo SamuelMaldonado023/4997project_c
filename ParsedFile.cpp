@@ -28,20 +28,22 @@ vector<string> ParsedFile::readAndTokenize() {
 }
 
 
-vector<string> tokenize(const string & str, const string & delim) {
-	vector<string> tokens;
-	size_t p0 = 0, p1 = string::npos;
-	while(p0 != string::npos) {
-    	p1 = str.find_first_of(delim, p0);
-    	if(p1 != p0) {
-      		string token = str.substr(p0, p1 - p0);
-			if(token.empty()){
-      			tokens.push_back(token);
-			}
-      	}
-		p0 = str.find_first_not_of(delim, p1);
-	}
-	return tokens;
+vector<string> tokenize(const string& str, const string& delim) {
+    vector<string> tokens;
+    size_t p0 = 0, p1;
+
+    while ((p1 = str.find_first_of(delim, p0)) != string::npos) {
+        if (p1 > p0) {
+            tokens.push_back(str.substr(p0, p1 - p0));  // PUSH REAL WORD
+        }
+        p0 = p1 + 1;
+    }
+
+    // yay token
+    if (p0 < str.size())
+        tokens.push_back(str.substr(p0));
+
+    return tokens;
 }
 
 int getdir (string dir, vector<string> &files){

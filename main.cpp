@@ -39,7 +39,14 @@ int readFiles(const string& directory) {
     return counter;
 }
 */
-
+// file reader for option selecter 1-5
+string readFullFile(const string& filename) {
+    ifstream in(filename);
+    if (!in.is_open()) return "BAD FILE";
+    stringstream buffer;
+    buffer << in.rdbuf();
+    return buffer.str();
+}
 int option;
 vector<string> user_keywords;
 string top1,top2,top3,top4,top5;
@@ -68,7 +75,7 @@ int main() {
 
 
     // user program start
-    cout<< "\n----Description Search Engine-----\n\tSearch movies and books descriptions by keywords\tEnter keywords(| to end):" ;
+    cout<< "\n\t----Description Search Engine-----\nSearch movies and books descriptions by keywords\nEnter keywords(| to end):" ;
 
     while(cin >> temp){ // will enter ekywords as long as user permits
         if (temp == "|") break;
@@ -77,7 +84,7 @@ int main() {
 
     vector<FileEntry> results = index.search(user_keywords);
 
-    cout << "\n----- Top 5  -----\n";
+    cout << "\n\t----- Top 5  -----\n";
 
     int n = min(5, (int)results.size());
     for (int i = 0; i < n; i++) {
@@ -105,6 +112,15 @@ int main() {
         return 0;
      }
 
-     cout << "\nSelected result: " << results[option-1].filename << endl;
+     // selects options
+     string selectedFile = results[option - 1].filename;
+
+     // option printer
+    cout << "\n\t-----RESULT-----\n";
+    cout << selectedFile << "\n\n";
+    cout << readFullFile(selectedFile) << "\n";
+
+return 0;
+
     return 0;
 }
