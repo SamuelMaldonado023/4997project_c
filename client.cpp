@@ -1,5 +1,10 @@
 #include "ParsedFile.h"
 #include <map>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
 
 
 
@@ -18,11 +23,22 @@ int main()
 
     getdir(dir,files);
 	vector< map <string, int> > all_freq_tables;
-    for (unsigned int i = 0;i < files.size();i++) {
-    	if (files[i].c_str()[0]!='.') {
-    		string tmp;
-    		cout <<  "./moviesdb/" + files[i] << endl;        
+	vector<string> filenames;
+	
+    for (unsigned int i = 0; i < files.size(); i++) {
+    	if (files[i][0]!='.') {
+    		string filepath = dir + "/" + files[i];
+			ParsedFile pf(filepath);
+
+			vector<string> tokens = pf.readAndTokenize();
+
+			map<string, int> freq;
+			for(auto &w : tokens) {
+				freq[w]++;
         }
+
+			all_freq_tables.push_back(freq);
+			filenames.push_back(filepath);
     }
         
 }
