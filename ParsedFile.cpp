@@ -14,10 +14,9 @@ vector<string> ParsedFile::readAndTokenize() {
 	vector<string> result;
  
  	if (myfile.is_open()) {
-		while ( myfile.good() ) {
+		while (getline(myfile, line)) {
 			// for every line in the file, tokenize and store
 			// to a vector of strings.
-			getline (myfile,line);
 			vector<string> tokenized_line = tokenize(line, " "); 
 			for(uint i=0; i<tokenized_line.size(); i++)
 				result.push_back(tokenized_line[i]);
@@ -36,15 +35,16 @@ vector<string> tokenize(const string & str, const string & delim) {
     	p1 = str.find_first_of(delim, p0);
     	if(p1 != p0) {
       		string token = str.substr(p0, p1 - p0);
-      		tokens.push_back(token);
+			if(token.empty()){
+      			tokens.push_back(token);
+			}
       	}
 		p0 = str.find_first_not_of(delim, p1);
 	}
 	return tokens;
 }
 
-int getdir (string dir, vector<string> &files)
-{
+int getdir (string dir, vector<string> &files){
     DIR *dp;
     struct dirent *dirp;
     if((dp  = opendir(dir.c_str())) == NULL) {
