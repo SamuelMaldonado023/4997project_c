@@ -23,7 +23,7 @@ vector<string> ParsedFile::readAndTokenize() {
 		}
 		myfile.close();
 	}
-	else cout << "readAndTokenize: Unable to open file, returning empty vector"; 
+	//else cout << "readAndTokenize: Unable to open file, returning empty vector"; 
 	return result;
 }
 

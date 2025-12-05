@@ -54,13 +54,14 @@ string temp;
 
 
 int main() {
-    // load directory index ( turn databases into inverted index)
+    // -----load directory index ( turn databases into inverted index)
     cout << "\n Loading directory index.. please wait..." << endl;
 
+    // load movies
     string dir = "./moviesdb";
     vector<string> files;
     getdir(dir, files);
-    InvertedIndex index;
+    InvertedIndex movieindex;
 
     for (auto &f : files) {
         if (f[0] == '.') continue;
@@ -69,12 +70,26 @@ int main() {
         ParsedFile pf(path);
         vector<string> tokens = pf.readAndTokenize();
 
-        index.addTokens(path, tokens);
-        cout << "Files loaded!: " << path << endl;
+        movieindex.addTokens(path, tokens);
+        //cout << "Files loading..(" << f << "/" << files << ")" << endl;
     }
 
+    // load books
+    dir = "./books_description_files";
+    getdir(dir, files);
+    InvertedIndex bookindex;
+    for (auto &f : files) {
+        if (f[0] == '.') continue;
 
-    // user program start
+        string path = dir + "/" + f;
+        ParsedFile pf(path);
+        vector<string> tokens = pf.readAndTokenize();
+
+        bookindex.addTokens(path, tokens);
+        //cout << "Files loading..(" << f << "/" << files << ")" << endl;
+    }
+
+    // ----user program start-----
     cout<< "\n\t----Description Search Engine-----\nSearch movies and books descriptions by keywords\nEnter keywords(| to end):" ;
 
     while(cin >> temp){ // will enter ekywords as long as user permits
@@ -82,45 +97,67 @@ int main() {
         user_keywords.push_back(temp);
     }
 
-    vector<FileEntry> results = index.search(user_keywords);
+    // ----- AFTER USER results----
+    vector<FileEntry> movieResults = movieindex.search(user_keywords);
+    vector<FileEntry> bookResults  = bookindex.search(user_keywords);
 
-    cout << "\n\t----- Top 5  -----\n";
+    cout << "\n\t----- Top Hits -----\n";
 
-    int n = min(5, (int)results.size());
-    for (int i = 0; i < n; i++) {
-        cout << i+1 << ". " << results[i].filename 
-             << " (score=" << results[i].count << ")\n";
+    int movieN = min(5, (int)movieResults.size());
+    int bookN  = min(5, (int)bookResults.size());
+
+    // move printer
+    cout << "\nMovies (1–5):\n";
+    for (int i = 0; i < movieN; i++) {
+        cout << i+1 << ". " << movieResults[i].filename 
+             << " (score=" << movieResults[i].count << ")\n";
     }
 
-    // if nothing with that keyword found, desplegar failure or empty, 
-    if (n == 0) {
+    // book printer
+    cout << "\nBooks (6–10):\n";
+    for (int i = 0; i < bookN; i++) {
+        cout << (i+6) << ". " << bookResults[i].filename 
+             << " (score=" << bookResults[i].count << ")\n";
+    }
+
+    int maxOption = movieN + bookN;
+
+    if (maxOption == 0) {
         cout << "No matching results.. quitting..\n";
         return 0;
     }
 
-    // si encuentran related keywords
-     cout << "\nChoose 1-" << n << " or 0 to quit: ";
-     cin >> option;
-    
-     while (option < 0 || option > 5){
-        cout << "Invalid option(has to be 1-5): ";
+    //------- user option input --------
+    cout << "\nChoose 1-" << maxOption << " or 0 to quit: ";
+    cin >> option;
+
+    while (option < 0 || option > maxOption) {
+        cout << "Invalid option(has to be 1-" << maxOption << "): ";
         cin >> option;
-     }
-    
-     if (option == 0) { // quit if user enters 0
+    }
+
+    if (option == 0) {
         cout << "Quitting.." << endl;
         return 0;
-     }
+    }
 
-     // selects options
-     string selectedFile = results[option - 1].filename;
+    // ------- option selection output-----
+    string selectedFile;
 
-     // option printer
+    if (option <= movieN) {
+        // movies 1–5
+        selectedFile = movieResults[option - 1].filename;
+    }
+    else {
+        // books 6–10
+        int bookIndexSelected = option - 6; 
+        selectedFile = bookResults[bookIndexSelected].filename;
+    }
+
+    // -------- search engine results -------
     cout << "\n\t-----RESULT-----\n";
     cout << selectedFile << "\n\n";
     cout << readFullFile(selectedFile) << "\n";
-
-return 0;
 
     return 0;
 }
