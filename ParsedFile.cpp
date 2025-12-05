@@ -8,6 +8,10 @@
 
 #include "ParsedFile.h"
 
+/* Funcion miembro readAndTokenize
+   Esta funcion abre el archivo y lee cada linea y la tokeniza en palabaras.
+   Devuelve un vector con todas las palabras.
+*/
 vector<string> ParsedFile::readAndTokenize() {
   	string line;
   	ifstream myfile (name.c_str());
@@ -23,30 +27,61 @@ vector<string> ParsedFile::readAndTokenize() {
 		}
 		myfile.close();
 	}
-	//else cout << "readAndTokenize: Unable to open file, returning empty vector"; 
+
 	return result;
 }
 
+string standardize(const string& w){  // Funcion que convierte strings a minusculas y elimina caracteres no alfabeticos.
+    string out;
+    for(char c : w) {
+        if(isalpha(c)){ 
+        out.push_back(tolower(c));
+        }
+    }
+    return out;
+}
 
+/* Recibe un string y un delimitador y los divide en plabras
+   Luego devuelve un vector con las palabras. (Las palabras ya estan estandarizadas.)
+*/
 vector<string> tokenize(const string& str, const string& delim) {
     vector<string> tokens;
     size_t p0 = 0, p1;
 
-    while ((p1 = str.find_first_of(delim, p0)) != string::npos) {
+    while ((p1 = str.find_first_of(delim, p0)) != string::npos) {  // Busca delimitadores y extrae palabras.
         if (p1 > p0) {
-            tokens.push_back(str.substr(p0, p1 - p0));  // PUSH REAL WORD
+            string stand_ = standardize(str.substr(p0, p1 - p0));
+            if(!stand_.empty()){
+                tokens.push_back(stand_);  // PUSH REAL WORD
+            }
         }
         p0 = p1 + 1;
     }
 
-    // yay token
-    if (p0 < str.size())
-        tokens.push_back(str.substr(p0));
+    // Procesa la ultima palabra si existe.
+    if (p0 < str.size()){
+        string stand_ = standardize(str.substr(p0));
+        if(!stand_.empty()){
+            tokens.push_back(stand_);
+        }
+    }
 
+        // Caso especial por si no encontro token pero la linea no esta vacia
+        if(!str.empty() && tokens.empty()){
+            string stand_ = standardize(str);
+
+            if(!stand_.empty()){
+                tokens.push_back(stand_);
+            }
+        }
+    
     return tokens;
 }
 
-int getdir (string dir, vector<string> &files){
+/*Recibe un nombre de directorio y devuelve un vector con los
+  nombres de todos los archivos contenidos en el. 
+*/ 
+int getdir (string dir, vector<string> &files){  
     DIR *dp;
     struct dirent *dirp;
     if((dp  = opendir(dir.c_str())) == NULL) {

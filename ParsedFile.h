@@ -72,5 +72,8 @@ int getdir (string, vector<string> &);
 
 vector<string> tokenize(const string & str, const string & delim);
 
+std::string standardize(const std::string& w); 
+// Convierte los strings a minisculas y elimina caracteres no alfabeticos para mejora busqueda.
+
 #endif
 

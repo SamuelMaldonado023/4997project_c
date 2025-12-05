@@ -11,7 +11,7 @@ struct FileEntry {
     int count;
 };
 
-class InvertedIndex {
+class InvertedIndex {  // Clase que implementa un indice invertido que asocia palabras con los archivos donde aparecen sus frecuencias.
 private:
     map<string, vector<FileEntry>> index;
 

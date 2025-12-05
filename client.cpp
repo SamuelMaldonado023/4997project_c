@@ -18,27 +18,29 @@ using namespace std;
 
 int main()
 {
-    string dir = string("./moviesdb");
+    string dir = string("./moviesdb");  // Nombre de directorio donde estan los archivos de pelicula.
+
     vector<string> files = vector<string>();
 
     getdir(dir,files);
 	vector< map <string, int> > all_freq_tables;
 	vector<string> filenames;
 	
+	
     for (unsigned int i = 0; i < files.size(); i++) {
     	if (files[i][0]!='.') {
-    		string filepath = dir + "/" + files[i];
+    		string filepath = dir + "/" + files[i];  // Construye la ruta completa del archivo
 			ParsedFile pf(filepath);
 
 			vector<string> tokens = pf.readAndTokenize();
 
-			map<string, int> freq;
+			map<string, int> freq;  // Tabla de frecuencias
 			for(auto &w : tokens) {
 				freq[w]++;
         }
 
-			all_freq_tables.push_back(freq);
-			filenames.push_back(filepath);
+			all_freq_tables.push_back(freq);  // Guarda la tabla de frecuencias en el vector.
+			filenames.push_back(filepath);  // Guarda el nombre del archivo
     }
         
 }
