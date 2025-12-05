@@ -43,6 +43,7 @@ int readFiles(const string& directory) {
 int option;
 vector<string> user_keywords;
 string top1,top2,top3,top4,top5;
+string temp;
 
 
 int main() {
@@ -51,7 +52,7 @@ int main() {
 
     string dir = "./moviesdb";
     vector<string> files;
-    getdir(dir files);
+    getdir(dir, files);
     InvertedIndex index;
 
     for (auto &f : files) {
@@ -92,12 +93,11 @@ int main() {
 
     // si encuentran related keywords
      cout << "\nChoose 1-" << n << " or 0 to quit: ";
-     int option;
      cin >> option;
     
      while (option < 0 || option > 5){
         cout << "Invalid option(has to be 1-5): ";
-        cin << option;
+        cin >> option;
      }
     
      if (option == 0) { // quit if user enters 0
