@@ -72,4 +72,5 @@ int getdir (string, vector<string> &);
 
 vector<string> tokenize(const string & str, const string & delim);
 
+#endif
 
