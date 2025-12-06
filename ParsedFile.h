@@ -64,7 +64,6 @@ int getdir (string, vector<string> &);
               partir a str.  Esto casi siempre es un espacion, coma, etc.
    
    Devuelve un vector de strings obtenidos de str.
-   
    Pre-condicion:  str y delim no son strings vacios
    Post-condición: No modifica ni a str ni a delim. Devuelve el 
                    vector de strings.
