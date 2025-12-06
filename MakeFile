@@ -1,0 +1,13 @@
+CXX = g++
+CXXFLAGS = -Wall _std=c++17
+SRC = main.cpp ParsedFile.cpp InvertedIndex.cpp
+OBJ = $(SRC:.cpp=. o)
+TARGET = search_engine
+
+all: $(TARGET)
+
+$(TARGET): $(OBJ)
+   $(CXX) $(CXXFLAGS) -o $@ $^
+
+clean:
+   rm -f $(OBJ) $(TARGET)
